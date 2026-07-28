@@ -3,11 +3,9 @@ import { navigation } from "../data/navigation";
 
 interface Props {
   activeSlug?: string;
-  availableSlugs: string[];
 }
 
-const { activeSlug, availableSlugs } = Astro.props;
-const available = new Set(availableSlugs);
+const { activeSlug } = Astro.props;
 ---
 
 <aside class="site-sidebar" aria-label="Site navigation">
@@ -29,22 +27,16 @@ const available = new Set(availableSlugs);
             <ul>
               {group.items.map((item) => (
                 <li>
-                  {available.has(item.slug) ? (
-                    <a
-                      class:list={[
-                        "nav-item",
-                        { active: item.slug === activeSlug }
-                      ]}
-                      href={`/articles/${item.slug}`}
-                      aria-current={item.slug === activeSlug ? "page" : undefined}
-                    >
-                      {item.title}
-                    </a>
-                  ) : (
-                    <span class="nav-item unavailable" aria-disabled="true">
-                      {item.title}
-                    </span>
-                  )}
+                  <a
+                    class:list={[
+                      "nav-item",
+                      { active: item.slug === activeSlug }
+                    ]}
+                    href={`/articles/${item.slug}`}
+                    aria-current={item.slug === activeSlug ? "page" : undefined}
+                  >
+                    {item.title}
+                  </a>
                 </li>
               ))}
             </ul>
@@ -167,11 +159,6 @@ const available = new Set(availableSlugs);
     background: var(--active);
     color: var(--ink);
     font-weight: 650;
-  }
-
-  .nav-item.unavailable {
-    color: var(--disabled);
-    cursor: default;
   }
 
   @media (max-width: 980px) {

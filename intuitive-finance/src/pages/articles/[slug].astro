@@ -5,39 +5,59 @@ import {
   type CollectionEntry
 } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import {
+  navigation,
+  type NavigationItem
+} from "../../data/navigation";
 
 export async function getStaticPaths() {
   const articles = await getCollection(
     "articles",
     ({ data }) => data.draft !== true
   );
+  const articlesBySlug = new Map(
+    articles.map((article) => [article.id, article])
+  );
 
-  return articles.map((article) => ({
-    params: { slug: article.id },
-    props: { article }
-  }));
+  return navigation.flatMap((group) =>
+    group.items.map((item) => ({
+      params: { slug: item.slug },
+      props: {
+        item,
+        article: articlesBySlug.get(item.slug)
+      }
+    }))
+  );
 }
 
 interface Props {
-  article: CollectionEntry<"articles">;
+  item: NavigationItem;
+  article?: CollectionEntry<"articles">;
 }
 
-const { article } = Astro.props;
-const { Content } = await render(article);
+const { article, item } = Astro.props;
+const rendered = article ? await render(article) : undefined;
+const Content = rendered?.Content;
+const title = article?.data.title ?? item.title;
+const description = article?.data.description ?? "";
 ---
 
 <BaseLayout
-  title={article.data.title}
-  description={article.data.description}
-  activeSlug={article.id}
+  title={title}
+  description={description}
+  activeSlug={item.slug}
 >
   <article class="article">
     <header class="article-header">
-      <h1>{article.data.title}</h1>
+      <h1>{title}</h1>
     </header>
 
-    <div class="article-body">
-      <Content />
-    </div>
+    {
+      Content && (
+        <div class="article-body">
+          <Content />
+        </div>
+      )
+    }
   </article>
 </BaseLayout>

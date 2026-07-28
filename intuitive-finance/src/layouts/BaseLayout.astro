@@ -1,5 +1,4 @@
 ---
-import { getCollection } from "astro:content";
 import Sidebar from "../components/Sidebar.astro";
 import "katex/dist/katex.min.css";
 import "../styles/global.css";
@@ -16,14 +15,9 @@ const {
   activeSlug
 } = Astro.props;
 
-const articles = await getCollection(
-  "articles",
-  ({ data }) => data.draft !== true
-);
-const availableSlugs = articles.map((article) => article.id);
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const documentTitle =
-  title === "Miroslav Holub" ? "Miroslav Holub | Intuitive Finance" : `${title} | Intuitive Finance`;
+  title === "Intuitive Finance" ? title : `${title} | Intuitive Finance`;
 ---
 
 <!doctype html>
@@ -44,7 +38,7 @@ const documentTitle =
         <slot />
       </main>
 
-      <Sidebar activeSlug={activeSlug} availableSlugs={availableSlugs} />
+      <Sidebar activeSlug={activeSlug} />
     </div>
   </body>
 </html>

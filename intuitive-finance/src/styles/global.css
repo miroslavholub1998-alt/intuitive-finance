@@ -87,7 +87,7 @@ a {
 }
 
 .article {
-  width: min(100%, 1180px);
+  width: 100%;
 }
 
 .article-header {
@@ -142,13 +142,13 @@ a {
 }
 
 .article-body p {
-  max-width: 84ch;
+  max-width: none;
   margin: 1rem 0;
 }
 
 .article-body ul,
 .article-body ol {
-  max-width: 86ch;
+  max-width: none;
   margin: 1rem 0 1.5rem;
   padding-left: 1.45rem;
 }
@@ -202,18 +202,23 @@ a {
 }
 
 .article-body .katex-display {
+  display: block;
+  width: 100%;
   max-width: 100%;
   overflow-x: auto;
   overflow-y: hidden;
   margin: 1.7rem 0 2rem;
   padding: 0.65rem 0 0.9rem;
-  text-align: center;
+  text-align: left;
   scrollbar-width: thin;
 }
 
 .article-body .katex-display > .katex {
-  min-width: max-content;
-  font-size: 1.02em;
+  display: block;
+  width: max-content;
+  max-width: none;
+  margin-inline: auto;
+  font-size: clamp(1em, 0.94em + 0.18vw, 1.13em);
 }
 
 .not-found {

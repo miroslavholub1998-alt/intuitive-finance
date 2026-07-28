@@ -7,7 +7,7 @@ Statický web postavený v Astro. Zdroj článků je v Markdownu, matematické z
 1. Zkopíruj `src/content/articles/_template.md`.
 2. Kopii pojmenuj podle adresy článku, například `particle-filters.md`.
 3. Uprav údaje mezi prvními dvěma řádky `---` a vlož text článku.
-4. Pokud už je článek uvedený v `src/data/navigation.ts`, odkaz se po buildu automaticky aktivuje.
+4. Pokud už je článek uvedený v `src/data/navigation.ts`, jeho prázdná stránka je klikací předem a po přidání souboru se automaticky naplní obsahem.
 5. Úplně nové téma přidej jedním řádkem také do `src/data/navigation.ts`.
 
 Povolené hodnoty `section`:
@@ -66,5 +66,5 @@ npm run build
 - Production branch: `main`
 - Build command: `npm run build`
 - Build output directory: `dist`
-- Root directory: `/`
+- Root directory: `intuitive-finance`
 - Project name: `intuitive-finance`

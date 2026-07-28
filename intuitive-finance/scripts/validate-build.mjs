@@ -52,6 +52,12 @@ for (const htmlFile of htmlFiles) {
   if (html.includes('class="katex-error"')) {
     errors.push(`${relativeName}: contains a KaTeX rendering error`);
   }
+  if (
+    html.includes('mathcolor="#cc0000"') ||
+    html.includes('style="color:#cc0000;"')
+  ) {
+    errors.push(`${relativeName}: contains a red KaTeX error token`);
+  }
 
   const assetUrls = [
     ...html.matchAll(/\b(?:href|src)="([^"]+)"/g)
@@ -65,11 +71,17 @@ for (const htmlFile of htmlFiles) {
 }
 
 const home = await readFile(path.join(outputRoot, "index.html"), "utf8");
-if (!/<h1[^>]*>Miroslav Holub<\/h1>/.test(home)) {
-  errors.push("index.html: the homepage must contain only the Miroslav Holub heading");
+if (!/<h1[^>]*>Intuitive Finance<\/h1>/.test(home)) {
+  errors.push("index.html: the homepage must contain the Intuitive Finance heading");
+}
+if (home.includes("Miroslav Holub")) {
+  errors.push("index.html: the removed personal name is still present");
 }
 if (home.includes("Filtering, optimization, and quantitative finance case studies.")) {
   errors.push("index.html: the removed homepage subtitle is still present");
+}
+if (home.includes('class="nav-item unavailable"')) {
+  errors.push("index.html: at least one navigation topic is still not clickable");
 }
 
 const articlePath = path.join(
@@ -82,6 +94,7 @@ const article = await readFile(articlePath, "utf8");
 for (const marker of [
   "1. State-Space Model",
   "2. Algorithm",
+  "<u><strong>Recursive loop for",
   "This formula can be derived as follows:",
   "And because we know that:",
   "we can continue as follows:",
@@ -89,6 +102,22 @@ for (const marker of [
 ]) {
   if (!article.includes(marker)) {
     errors.push(`Kalman Filter article: missing content marker "${marker}"`);
+  }
+}
+
+for (const slug of [
+  "markov-switching-models",
+  "kalman-filter",
+  "particle-filters",
+  "fast-fourier-transformation",
+  "hodrick-prescott-filter",
+  "lstm",
+  "almgren-chriss-continuous-model",
+  "cva-irs-hull-white"
+]) {
+  const pagePath = path.join(outputRoot, "articles", slug, "index.html");
+  if (!(await exists(pagePath))) {
+    errors.push(`missing clickable article page: ${slug}`);
   }
 }
 

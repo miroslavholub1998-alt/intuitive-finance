@@ -66,7 +66,7 @@ $$
 \mathbf{P}_{0\mid 0}=\mathbf{P}_0
 $$
 
-**Recursive loop for $t=1$ to $N$:**
+<u>**Recursive loop for $t=1$ to $N$:**</u>
 
 ### (1) Prediction (Time Update)
 
@@ -258,7 +258,7 @@ $$
 }^{\substack{
 \text{Uncertainty of }\widehat{\mathbf{x}}_{t-1\mid t-1}\text{ estimate}\\
 \text{propagated by }\mathbf{A}_t\text{ into the uncertainty}\\
-\text{of the predicted state at time }\math{t}
+\text{of the predicted state at time }t
 }}
 +
 \overbrace{
@@ -266,7 +266,7 @@ $$
 }^{\substack{
 \text{Uncertainty of }\mathbf{w}_t\text{ propagated}\\
 \text{by }\mathbf{W}_t\text{ into the uncertainty of}\\
-\text{the predicted state at time }\math{t}
+\text{the predicted state at time }t
 }}.
 \end{aligned}
 $$
@@ -324,11 +324,11 @@ $$
       \mathbf{K}_t
       &=
       \frac{
-      \text{\small\itshape (Incomplete) uncertainty of predicted observation}
+      \textit{\small (Incomplete) uncertainty of predicted observation}
       }{
-      \text{\small\itshape Uncertainty of predicted observation}
+      \textit{\small Uncertainty of predicted observation}
       +
-      \text{\small\itshape Uncertainty of measurement noise}
+      \textit{\small Uncertainty of measurement noise}
       }
       \\[0.5em]
       &=

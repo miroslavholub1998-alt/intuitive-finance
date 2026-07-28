@@ -15,10 +15,7 @@ export default defineConfig({
           rehypeKatex,
           {
             strict: "ignore",
-            throwOnError: false,
-            macros: {
-              "\\math": "#1"
-            }
+            throwOnError: true
           }
         ]
       ]
