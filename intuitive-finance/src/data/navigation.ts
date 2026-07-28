@@ -42,7 +42,7 @@ export const navigation: NavigationGroup[] = [
     title: "Case Studies",
     items: [
       {
-        title: "CVA calculation of IRS with Use of HW",
+        title: "CVA calculation of IRS with use of HW",
         slug: "cva-irs-hull-white"
       }
     ]
