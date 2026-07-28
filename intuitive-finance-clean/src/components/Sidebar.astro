@@ -1,0 +1,211 @@
+---
+import { navigation } from "../data/navigation";
+
+interface Props {
+  activeSlug?: string;
+  availableSlugs: string[];
+}
+
+const { activeSlug, availableSlugs } = Astro.props;
+const available = new Set(availableSlugs);
+---
+
+<aside class="site-sidebar" aria-label="Site navigation">
+  <a class="site-brand" href="/">Intuitive Finance</a>
+
+  <nav aria-label="Article navigation">
+    {
+      navigation.map((group) => {
+        const isActiveGroup = group.items.some(
+          (item) => item.slug === activeSlug
+        );
+
+        return (
+          <details class="nav-group" open={isActiveGroup}>
+            <summary>
+              <span>{group.title}</span>
+            </summary>
+
+            <ul>
+              {group.items.map((item) => (
+                <li>
+                  {available.has(item.slug) ? (
+                    <a
+                      class:list={[
+                        "nav-item",
+                        { active: item.slug === activeSlug }
+                      ]}
+                      href={`/articles/${item.slug}`}
+                      aria-current={item.slug === activeSlug ? "page" : undefined}
+                    >
+                      {item.title}
+                    </a>
+                  ) : (
+                    <span class="nav-item unavailable" aria-disabled="true">
+                      {item.title}
+                    </span>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </details>
+        );
+      })
+    }
+  </nav>
+</aside>
+
+<style>
+  .site-sidebar {
+    position: sticky;
+    top: 0;
+    align-self: start;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100vh;
+    overflow-y: auto;
+    border-left: 1px solid var(--line);
+    background: var(--sidebar);
+    padding: 2.2rem 2rem 3rem;
+  }
+
+  .site-brand {
+    display: inline-block;
+    margin-bottom: 2.5rem;
+    color: var(--ink);
+    font-family: var(--serif);
+    font-size: 1.48rem;
+    font-weight: 700;
+    line-height: 1.1;
+    text-decoration: none;
+  }
+
+  nav {
+    display: grid;
+    gap: 0;
+  }
+
+  .nav-group {
+    border-top: 1px solid var(--line-soft);
+    padding: 1.05rem 0;
+  }
+
+  .nav-group:first-child {
+    border-top: 0;
+    padding-top: 0;
+  }
+
+  summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    min-height: 2.25rem;
+    cursor: pointer;
+    color: var(--ink);
+    font-size: 0.72rem;
+    font-weight: 750;
+    letter-spacing: 0.14em;
+    line-height: 1.4;
+    list-style: none;
+    text-transform: uppercase;
+    user-select: none;
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  summary::after {
+    content: "+";
+    flex: 0 0 auto;
+    color: var(--muted);
+    font-size: 1.05rem;
+    font-weight: 400;
+    line-height: 1;
+  }
+
+  details[open] summary::after {
+    content: "−";
+  }
+
+  summary:focus-visible,
+  .site-brand:focus-visible,
+  .nav-item:focus-visible {
+    border-radius: 2px;
+    outline: 2px solid var(--focus);
+    outline-offset: 4px;
+  }
+
+  ul {
+    display: grid;
+    gap: 0.18rem;
+    margin: 0.55rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .nav-item {
+    display: block;
+    border-radius: 4px;
+    padding: 0.48rem 0.55rem;
+    color: var(--muted);
+    font-size: 0.91rem;
+    line-height: 1.38;
+    text-decoration: none;
+    transition:
+      background-color 140ms ease,
+      color 140ms ease;
+  }
+
+  a.nav-item:hover {
+    background: var(--hover);
+    color: var(--ink);
+  }
+
+  .nav-item.active {
+    background: var(--active);
+    color: var(--ink);
+    font-weight: 650;
+  }
+
+  .nav-item.unavailable {
+    color: var(--disabled);
+    cursor: default;
+  }
+
+  @media (max-width: 980px) {
+    .site-sidebar {
+      position: static;
+      height: auto;
+      border-bottom: 1px solid var(--line);
+      border-left: 0;
+      padding: 1.5rem clamp(1.25rem, 5vw, 3rem) 1.2rem;
+    }
+
+    .site-brand {
+      margin-bottom: 1.35rem;
+    }
+
+    nav {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      column-gap: 1.25rem;
+    }
+
+    .nav-group,
+    .nav-group:first-child {
+      border-top: 1px solid var(--line-soft);
+      padding-top: 0.8rem;
+    }
+  }
+
+  @media (max-width: 700px) {
+    nav {
+      grid-template-columns: 1fr;
+    }
+
+    .nav-group {
+      border-top: 1px solid var(--line-soft);
+    }
+  }
+</style>

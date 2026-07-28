@@ -1,0 +1,50 @@
+---
+import { getCollection } from "astro:content";
+import Sidebar from "../components/Sidebar.astro";
+import "katex/dist/katex.min.css";
+import "../styles/global.css";
+
+interface Props {
+  title: string;
+  description?: string;
+  activeSlug?: string;
+}
+
+const {
+  title,
+  description = "Articles on quantitative finance, filtering, optimization, and applied case studies.",
+  activeSlug
+} = Astro.props;
+
+const articles = await getCollection(
+  "articles",
+  ({ data }) => data.draft !== true
+);
+const availableSlugs = articles.map((article) => article.id);
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const documentTitle =
+  title === "Miroslav Holub" ? "Miroslav Holub | Intuitive Finance" : `${title} | Intuitive Finance`;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#f7f7f4" />
+    <link rel="canonical" href={canonical} />
+    <title>{documentTitle}</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
+
+    <div class="site-shell">
+      <main id="main-content" class="site-main">
+        <slot />
+      </main>
+
+      <Sidebar activeSlug={activeSlug} availableSlugs={availableSlugs} />
+    </div>
+  </body>
+</html>
